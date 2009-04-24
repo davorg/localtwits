@@ -1,0 +1,9 @@
+---
+username: your twitter id here
+password: your twitter password here
+title: a title
+subtitle: some witty subtitle
+output: index.html
+# I use this to trigger the addition of Google Analytics code
+# Obviously it's optional
+analytics_id: 

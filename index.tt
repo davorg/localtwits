@@ -1,0 +1,56 @@
+[% USE Clickable;
+   USE twit = Subst pattern = '\@(\w+)'
+                    replacement = '<a href="http://twitter.com/$1">@$1</a>'
+                    global = 1 -%]
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <link rel="stylesheet" href="/css/reset.css" type="text/css" />
+    <link rel="stylesheet" href="/css/layout.css" type="text/css" />
+    <link rel="stylesheet" href="/css/typography.css" type="text/css" />
+    <title>[% cfg.title %]</title>
+  </head>
+  <body>
+    <div id="header">
+      <h1>[% cfg.title %]</h1>
+      <p>[% cfg.subtitle %]</p>
+    </div>
+    <div id="content">
+      <ul class="tweets">
+[% FOREACH tweet IN tweets -%]
+        <li class="tweet"><img src="[% tweet.user.profile_image_url %]" width="48" height="48" alt="[% tweet.user.name %]" />
+          <h2>[% tweet.user.name %] / <a href="http://twitter.com/[% tweet.user.screen_name %]">@[% tweet.user.screen_name %]</a></h2>
+          <span class="tweettext">[% tweet.text | clickable | $twit %]</span><br />
+          <span class="time"><a href="http://twitter.com/[% tweet.user.screen_name %]/status/[% tweet.id %]">[% tweet.created_at %]</a></span>[% IF tweet.in_reply_to_status_id %]<br /><span class="reply">in reply to <a href="http://twitter.com/[% tweet.in_reply_to_screen_name %]/status/[% tweet.in_reply_to_status_id %]">@[% tweet.in_reply_to_screen_name %]</a></span>[% END %][% IF tweet.source %]<br /><span class="via">via [% tweet.source; END %]</span></li>
+[% END %]
+      </ul>
+    </div>
+    <div id="roll">
+      <h2>Featuring</h2>
+      <ul>
+[% FOR f IN follows.keys.sort -%]
+        <li><a href="http://twitter.com/[% f %]">@[% f %]</a></li>
+[% END -%]
+      </ul>
+    </div>
+    </div>
+    <div id="about">
+      <h2>About</h2>
+      <p>You might want to put some interesting information about your
+        site here</p>
+    </div>
+[% IF cfg.analytics_id -%]
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("[% cfg.analytics_id %]");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+[% END -%]
+  </body>
+</html>

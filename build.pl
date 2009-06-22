@@ -9,8 +9,6 @@ use YAML 'LoadFile';
 
 my $config = LoadFile(shift || 'config.yaml');
 
-my ($user, $pass) = ('balhamtwits', 'b4lh4m7w175');
-
 my $t = Net::Twitter->new({
   username => $config->{username},
   password => $config->{password},

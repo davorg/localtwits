@@ -8,8 +8,8 @@ use Template;
 use YAML 'LoadFile';
 
 my $config = LoadFile(shift || 'config.yaml');
-$config->{template} ||= 'index.tt';
-$config->{output}   ||= 'index.html';
+
+my ($user, $pass) = ('balhamtwits', 'b4lh4m7w175');
 
 my $t = Net::Twitter->new({
   username => $config->{username},
@@ -21,10 +21,10 @@ my $follows = autofollow($t);
 my $tweets = $t->friends_timeline({count => 20});
 
 my $tt = Template->new;
-$tt->process($config->{template},
+$tt->process('index.tt',
              { tweets => $tweets, follows => $follows, cfg => $config, },
-             $config->{output},
-            )
+             'index.html',
+             {binmode => ':utf8'})
   or die $tt->error;
 
 sub autofollow {

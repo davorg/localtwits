@@ -16,7 +16,7 @@ my $t = Net::Twitter->new({
 
 my $follows = autofollow($t);
 
-my $tweets = $t->friends_timeline({count => 20});
+my $tweets = $t->friends_timeline({count => $config->{tweets} || 20});
 
 my $tt = Template->new;
 $tt->process('index.tt',

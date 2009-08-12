@@ -5,6 +5,8 @@ title: a title
 subtitle: some witty subtitle
 template: index.tt
 output: index.html
+# number of tweets to display (defaults to 20)
+tweets: 
 # I use this to trigger the addition of Google Analytics code
 # Obviously it's optional
 analytics_id: 

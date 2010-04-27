@@ -32,7 +32,7 @@ sub autofollow {
   my $follow = $t->friends;
 
   unless ($follow) {
-    warn "$t->{response_message}\n";
+    warn "$t->http_message\n";
     return;
   }
 
@@ -54,9 +54,11 @@ sub autofollow {
     }
   }
 
-  foreach (@{$t->followers}) {
-    unless ($nofollow{$_->{screen_name}} or $follow{$_->{screen_name}}) {
-      $t->create_friend($_->{screen_name});
+  if (defined(my $f = $t->followers)) {
+    foreach (@{$f}) {
+      unless ($nofollow{$_->{screen_name}} or $follow{$_->{screen_name}}) {
+        $t->create_friend($_->{screen_name});
+      }
     }
   }
 

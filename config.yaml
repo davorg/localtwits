@@ -1,6 +1,4 @@
 ---
-username: your twitter id here
-password: your twitter password here
 title: a title
 subtitle: some witty subtitle
 template: index.tt
@@ -10,3 +8,7 @@ tweets:
 # I use this to trigger the addition of Google Analytics code
 # Obviously it's optional
 analytics_id: 
+# You get these from Twitter when you register your new
+# app at http://twitter.com/apps/new`
+consumer_key: 
+consumer_secret:

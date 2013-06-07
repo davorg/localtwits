@@ -27,15 +27,23 @@ unless ($t->authorized()) {
   exit();
 }
 
-my $follows = autofollow($t);
+#my $follows = autofollow($t);
 
-exit unless $follows;
+#exit unless $follows;
 
-my $tweets = $t->friends_timeline({count => $config->{tweets} || 20});
+my $members = $t->list_members({
+  owner_screen_name => 'balhamtwits',
+  slug => 'balhamites',
+});
+
+my $tweets = $t->list_statuses({
+  owner_screen_name => 'balhamtwits',
+  slug => 'balhamites',
+});
 
 my $tt = Template->new;
 $tt->process('index.tt',
-             { tweets => $tweets, follows => $follows, cfg => $config, },
+             { tweets => $tweets, cfg => $config, follows => $members->{users} },
              'index.html',
              {binmode => ':utf8'})
   or die $tt->error;

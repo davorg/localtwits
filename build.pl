@@ -10,7 +10,7 @@ use YAML 'LoadFile';
 my $config = LoadFile(shift || 'config.yaml');
 
 my $t = Net::Twitter->new({
-  traits => [qw(API::REST OAuth)],
+  traits => [qw(API::RESTv1_1 OAuth)],
   consumer_key => $config->{consumer_key},
   consumer_secret => $config->{consumer_secret},
 }) or die;

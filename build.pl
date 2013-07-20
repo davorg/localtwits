@@ -27,14 +27,19 @@ unless ($t->authorized()) {
   exit();
 }
 
-#my $follows = autofollow($t);
+my $list_members;
+my $cursor = -1;
 
-#exit unless $follows;
+while ($cursor) {
+  my $members = $t->list_members({
+    owner_screen_name => 'balhamtwits',
+    slug => 'balhamites',
+    cursor => $cursor,
+  });
 
-my $members = $t->list_members({
-  owner_screen_name => 'balhamtwits',
-  slug => 'balhamites',
-});
+  $cursor = $members->{next_cursor};
+  push @$list_members, @{$members->{users}};
+}
 
 my $tweets = $t->list_statuses({
   owner_screen_name => 'balhamtwits',
@@ -43,7 +48,7 @@ my $tweets = $t->list_statuses({
 
 my $tt = Template->new;
 $tt->process('index.tt',
-             { tweets => $tweets, cfg => $config, follows => $members->{users} },
+             { tweets => $tweets, cfg => $config, follows => $list_members },
              'index.html',
              {binmode => ':utf8'})
   or die $tt->error;

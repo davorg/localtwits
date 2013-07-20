@@ -48,62 +48,6 @@ $tt->process('index.tt',
              {binmode => ':utf8'})
   or die $tt->error;
 
-sub autofollow {
-  my $t = shift;
-
-  my %follow;
-
-  for (my $cur = -1, my $r; $cur; $cur = $r->{next_cursor}) {
-    $r = $t->friends({cursor => $cur});
-
-    foreach (@{$r->{users}}) {
-      $follow{$_->{screen_name}} = 1;
-    }
-  }
-
-#  unless ($follow) {
-#    warn scalar localtime() . "\n";
-#    warn $t->http_message . "\n";
-#    warn $t->{_twitter_error}{error} . "\n";
-#    return;
-#  }
-
-  my %nofollow;
-  if (-e 'nofollow') {
-    open my $nf, '<', 'nofollow' or die $!;
-    while (<$nf>) {
-      chomp;
-      s/\s+//;
-      $nofollow{$_} = 1;
-
-      if ($follow{$_}) {
-        $t->destroy_friend($_);
-        delete $follow{$_};
-      }
-    }
-  }
-
-  my %followers;
-
-  for (my $cur = -1, my $r; $cur; $cur = $r->{next_cursor}) {
-    $r = $t->followers({cursor => $cur});
-
-    foreach (@{$r->{users}}) {
-      unless ($nofollow{$_->{screen_name}} or $follow{$_->{screen_name}}) {
-        if ($_->{protected}) {
-          warn "Protected user $_->{screen_name} following\n";
-          warn "Not following back\n";
-          next;
-        }
-        $t->create_friend($_->{screen_name});
-        $follow{$_->{screen_name}} = 1;
-      }
-    }
-  }
-
-  return \%follow;
-}
-
 sub get_twitter_authorization {
   print "Visit the following URL in your browser to authorize this app:\n" .
     $t->get_authorization_url() . "\n";
